@@ -1,0 +1,16 @@
+{
+  "name": "completed-date-notion",
+  "version": "0.0.1",
+  "description": "Completed date implementation for Notion",
+  "main": "index.js",
+  "author": "Cherkashin Alexander",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.0.0",
+    "dotenv": "^16.0.1"
+  }
+}
