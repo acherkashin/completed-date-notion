@@ -5,9 +5,9 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
 (async () => {
     const databaseId = process.env.DATABASE_ID;
-    // const now = new Date("2022-07-20T04:51:27.000Z");
-    const now = new Date()
-    const [withoutTime] = now.toISOString().split('T');
+    const now = new Date("2022-07-19T04:51:27.000Z");
+    // const now = new Date()
+    const [todayDate] = now.toISOString().split('T');
     
     console.log(`Requesting tasks changed on ${now.toISOString()}`);
 
@@ -18,7 +18,7 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
               {
                 "property": "Modified At",
                 "date": {
-                    "equals": withoutTime
+                    "equals": todayDate
                 }
               },
               {
@@ -46,7 +46,23 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
     console.log(JSON.stringify(pagesWithProperties, null, 2));
 
     // status may be null if default value is used for status
-    const completedToday = pagesWithProperties.filter(item => item.property.status?.name.includes("Done"));
+    const completedToday = pagesWithProperties.filter(({property}) => property.status?.name.includes("Done"));
     console.log(`Tasks completed today`);
     console.log(JSON.stringify(completedToday, null, 2));
+
+    // TODO: set up completed at, doesn't work
+    const updateRequests = completedToday.map(({page}) => {
+      return notion.pages.update({
+        page_id: page.id,
+        properties: {
+          'Completed At': {
+            date: todayDate
+          }
+        }
+      });
+    });
+
+    await Promise.all(updateRequests);
+
+    console.log(`✅ Done`);
   })();
