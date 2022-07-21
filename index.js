@@ -5,6 +5,7 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
 (async () => {
     const databaseId = process.env.DATABASE_ID;
+    // const now = new Date("2022-07-20T04:51:27.000Z");
     const now = new Date()
     const [withoutTime] = now.toISOString().split('T');
     
@@ -18,6 +19,12 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
                 "property": "Modified At",
                 "date": {
                     "equals": withoutTime
+                }
+              },
+              {
+                "property": "Completed At",
+                "date": {
+                  "is_empty": true,
                 }
               }
             ]
@@ -34,9 +41,12 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
     });
 
     const pagesWithProperties = await Promise.all(requests);
-    
-    console.log(pagesWithProperties.filter(item => item.property.status.name.includes("Done")));
-    // const listId = response.results[0].properties['List'].id;
-    // const listValue = await notion.pages.properties.retrieve({page_id: response.results[0].id, property_id: listId})
-    // console.log(listValue);
+
+    console.log(`Tasks changed on ${now.toISOString()}`);
+    console.log(JSON.stringify(pagesWithProperties, null, 2));
+
+    // status may be null if default value is used for status
+    const completedToday = pagesWithProperties.filter(item => item.property.status?.name.includes("Done"));
+    console.log(`Tasks completed today`);
+    console.log(JSON.stringify(completedToday, null, 2));
   })();
