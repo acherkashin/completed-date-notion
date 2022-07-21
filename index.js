@@ -5,6 +5,11 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
 (async () => {
     const databaseId = process.env.DATABASE_ID;
+    const now = new Date()
+    const [withoutTime] = now.toISOString().split('T');
+    
+    console.log(`Requesting tasks changed on ${now.toISOString()}`);
+
     const response = await notion.databases.query({
       database_id: databaseId,
       filter: {
@@ -12,7 +17,7 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
               {
                 "property": "Modified At",
                 "date": {
-                    "equals": "2022-07-18"
+                    "equals": withoutTime
                 }
               }
             ]
