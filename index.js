@@ -9,9 +9,9 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
     const now = new Date()
     const [todayDate] = now.toISOString().split('T');
     
-    console.log(`Requesting tasks changed on ${now.toISOString()}`);
+    console.log(`ℹ️ Requesting tasks changed on ${now.toISOString()}`);
 
-    const response = await notion.databases.query({
+    const modifiedToday = await notion.databases.query({
       database_id: databaseId,
       filter: {
             "and": [
@@ -31,7 +31,7 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
       },
     });
 
-    const requests = response.results.map(page => {
+    const requests = modifiedToday.results.map(page => {
         return notion.pages.properties.retrieve({
             page_id: page.id, 
             property_id: page.properties['List'].id
@@ -42,12 +42,12 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
     const pagesWithProperties = await Promise.all(requests);
 
-    console.log(`Tasks changed on ${now.toISOString()}`);
+    console.log(`ℹ️ Tasks changed on ${now.toISOString()}`);
     console.log(JSON.stringify(pagesWithProperties, null, 2));
 
     // status may be null if default value is used for status
     const completedToday = pagesWithProperties.filter(({property}) => property.status?.name.includes("Done"));
-    console.log(`Tasks completed today`);
+    console.log(`🕙 Tasks completed today:`);
     console.log(JSON.stringify(completedToday, null, 2));
 
     const updateRequests = completedToday.map(({page}) => {
@@ -61,8 +61,8 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
           }
         }
       }).then(
-        () => console.log(`- Page ${page.id} is updated`), 
-        () => console.log(`- Failed to update page ${page.id}`),
+        () => console.log(`✅ Page ${page.id} is updated`), 
+        () => console.log(`❌ Failed to update page ${page.id}`),
       );
     });
 
