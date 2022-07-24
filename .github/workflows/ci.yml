@@ -1,0 +1,23 @@
+name: Continuous Integration
+
+on:
+  schedule:
+    # Run pipeline everyday at 23 - https://crontab.guru/#0_23_*_*_*
+    - cron: 0 23 * * *
+
+jobs:
+  deploy:
+    name: Builds and Deploys to github pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - run: yarn --frozen-lockfile
+      - name: Set Completed Date
+        run: yarn run start
+        env:
+          DATABASE_ID: ${{ secrets.DATABASE_ID }}
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+
