@@ -7,7 +7,8 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "complete-old": "node completeOldTasks.js"
   },
   "dependencies": {
     "@notionhq/client": "^2.0.0",
