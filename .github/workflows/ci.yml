@@ -1,4 +1,7 @@
 name: Continuous Integration
+env:
+  DATABASE_ID: ${{ secrets.DATABASE_ID }}
+  NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
 
 on:
   schedule:
@@ -20,7 +23,3 @@ jobs:
       - run: yarn --frozen-lockfile
       - name: Set Completed Date
         run: yarn run start
-        env:
-          DATABASE_ID: ${{ secrets.DATABASE_ID }}
-          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
-
