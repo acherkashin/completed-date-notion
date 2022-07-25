@@ -2,8 +2,8 @@ name: Continuous Integration
 
 on:
   schedule:
-    # Run pipeline everyday at 23 - https://crontab.guru/#0_23_*_*_*
-    - cron: 0 23 * * *
+    # Run every hour
+    - cron: 0 */1 * * *
   push:
     branches:
       - main
