@@ -4,6 +4,9 @@ on:
   schedule:
     # Run pipeline everyday at 23 - https://crontab.guru/#0_23_*_*_*
     - cron: 0 23 * * *
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
