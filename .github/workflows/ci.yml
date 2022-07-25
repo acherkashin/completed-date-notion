@@ -1,7 +1,4 @@
 name: Continuous Integration
-env:
-  DATABASE_ID: ${{ secrets.DATABASE_ID }}
-  NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
 
 on:
   schedule:
@@ -15,6 +12,10 @@ jobs:
   deploy:
     name: Builds and Deploys to github pages
     runs-on: ubuntu-latest
+    environment: "Production"
+    env:
+      DATABASE_ID: ${{ secrets.DATABASE_ID }}
+      NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
