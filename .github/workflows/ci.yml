@@ -10,7 +10,7 @@ on:
 
 jobs:
   deploy:
-    name: Builds and Deploys to github pages
+    name: Builds and Deploys to github pages 2
     runs-on: ubuntu-latest
     environment: "Production"
     env:
