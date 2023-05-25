@@ -25,3 +25,19 @@ jobs:
       - run: yarn --frozen-lockfile
       - name: Set Completed Date
         run: yarn run start
+  update-old:
+    name: Setups Completed date for all records
+    if: github.event_name == 'workflow_dispatch'  # Only run when triggered manually
+    runs-on: ubuntu-latest
+    environment: "Production"
+    env:
+      DATABASE_ID: ${{ secrets.DATABASE_ID }}
+      NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - run: yarn --frozen-lockfile
+      - name: Set Completed Date for all records
+        run: yarn run complete-old
