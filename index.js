@@ -1,7 +1,7 @@
 require('dotenv').config();
-const { completeTasks } = require('./completeTasks');
+const { completeTasks, retryAsync } = require('./completeTasks');
 
 (async () => {
   const date = new Date();
-  completeTasks(process.env.DATABASE_ID, date);
+  retryAsync(() => completeTasks(process.env.DATABASE_ID, date), 5);
 })();

@@ -1,9 +1,9 @@
-const { completeTasks } = require('./completeTasks');
+const { completeTasks, retryAsync } = require('./completeTasks');
 require('dotenv').config();
 
 (async () => {
-  const startDate = new Date('2023-02-01T04:51:27.000Z');
-  const endDate = new Date('2023-05-26T04:51:27.000Z');
+  const startDate = new Date(process.env.START_DATE);
+  const endDate = new Date(process.env.END_DATE);
   const currentDate = new Date(startDate.toISOString());
 
   while (currentDate < endDate) {
@@ -14,17 +14,3 @@ require('dotenv').config();
     }, 5);
   }
 })();
-
-async function retryAsync(callback, retries) {
-  try {
-    await callback();
-  } catch (error) {
-    console.log('Error:', error.message);
-    if (retries > 0) {
-      console.log(`❌ Retrying (${retries} retries left)...`);
-      await retryAsync(callback, retries - 1);
-    } else {
-      console.log('❌ Request failed after retries');
-    }
-  }
-}

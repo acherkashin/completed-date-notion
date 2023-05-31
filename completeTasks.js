@@ -70,6 +70,21 @@ async function completeTasks(databaseId, date) {
   console.log(`✅ Done`);
 }
 
+async function retryAsync(callback, retries) {
+  try {
+    await callback();
+  } catch (error) {
+    console.log('Error:', error.message);
+    if (retries > 0) {
+      console.log(`❌ Retrying (${retries} retries left)...`);
+      await retryAsync(callback, retries - 1);
+    } else {
+      console.log('❌ Request failed after retries');
+    }
+  }
+}
+
 module.exports = {
   completeTasks,
+  retryAsync,
 };

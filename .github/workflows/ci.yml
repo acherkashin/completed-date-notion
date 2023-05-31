@@ -8,6 +8,15 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      start_date:
+        description: 'Start date'
+        required: false
+        default: '2022-02-20T04:51:27.000Z'
+      end_date:
+        description: 'End date'
+        required: false
+        default: '2023-05-26T04:51:27.000Z'
 
 jobs:
   deploy:
@@ -33,6 +42,8 @@ jobs:
     env:
       DATABASE_ID: ${{ secrets.DATABASE_ID }}
       NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+      START_DATE: ${{ inputs.start_date }}
+      END_DATE: ${{ inputs.end_date }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
